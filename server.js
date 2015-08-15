@@ -11,13 +11,24 @@ spark.getDevice('domcore0', function(err, device) {
         console.log(data)
     })
 
+    device.subscribe('calibration', function(data) {
+        data = JSON.parse(data.data)
+        console.log(data)
+    })
+
     setInterval(function () {
         device.callFunction('dust', '', function(err, data) {
             if (err) console.log('ERROR:', err)
         })
     },15000)
     
-    device.callFunction('dust', '', function(err, data) {
+
+    device.callFunction('calibrate', 'h=50', function(err, data) {
         if (err) console.log('ERROR:', err)
     })
+    setTimeout(function () {
+        device.callFunction('dust', '', function(err, data) {
+            if (err) console.log('ERROR:', err)
+        })
+    },5000)
 })
